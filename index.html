@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuiz Sejarah Tingkatan 3 — Bab 7</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --secondary: #3498db;
+      --success: #2ecc71;
+      --danger: #e74c3c;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #2c3e50;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 25px;
+    }
+
+    header h1 {
+      margin: 0 0 10px 0;
+      font-size: 1.8rem;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    .section-title {
+      background: #e2e8f0;
+      color: var(--primary);
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin: 30px 0 15px 0;
+      font-size: 1.2rem;
+      border-left: 6px solid var(--secondary);
+    }
+
+    .quiz-card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border: 1px solid #e1e8ed;
+    }
+
+    .question-number {
+      font-weight: bold;
+      color: var(--secondary);
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    .question-text {
+      font-weight: 600;
+      margin-bottom: 15px;
+      font-size: 1.05rem;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    @media (min-width: 600px) {
+      .options-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .option-btn {
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      padding: 12px 15px;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      color: var(--text);
+    }
+
+    .option-btn:hover:not([disabled]) {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    .option-btn.correct {
+      background-color: #d1fae5 !important;
+      border-color: var(--success) !important;
+      color: #065f46;
+      font-weight: bold;
+    }
+
+    .option-btn.wrong {
+      background-color: #fee2e2 !important;
+      border-color: var(--danger) !important;
+      color: #991b1b;
+    }
+
+    .feedback {
+      margin-top: 12px;
+      padding: 10px 15px;
+      border-radius: 6px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .feedback.correct {
+      display: block;
+      background: #ecfdf5;
+      color: #047857;
+    }
+
+    .feedback.wrong {
+      display: block;
+      background: #fef2f2;
+      color: #b91c1c;
+    }
+
+    .score-board {
+      position: sticky;
+      top: 10px;
+      background: #ffffff;
+      border: 2px solid var(--secondary);
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    .score-board h3 {
+      margin: 0;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Kuiz Sejarah Tingkatan 3 — Bab 7</h1>
+    <p>Penentangan Masyarakat Tempatan | KSSM / UASA (60 Soalan)</p>
+  </header>
+
+  <div class="score-board">
+    <h3>Skor Semasa: <span id="score">0</span> / 60</h3>
+  </div>
+
+  <form id="quizForm"></form>
+</div>
+
+<script>
+const questionsData = [
+  // 7.1
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 1, q: "Apakah kesan campur tangan British terhadap sistem pentadbiran tempatan?", options: ["A. Kuasa pembesar tempatan semakin bertambah", "B. Sistem pentadbiran tempatan tidak berubah", "C. Masyarakat tempatan kehilangan hak dan kedudukan", "D. Semua penduduk mendapat kuasa politik yang sama"], ans: 2 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 2, q: "Antara berikut, yang manakah merupakan bentuk penentangan masyarakat tempatan terhadap British?", options: ["A. Penentangan bersenjata", "B. Penghijrahan ke luar negara sahaja", "C. Pembukaan kawasan perdagangan baharu sahaja", "D. Penghapusan semua adat tempatan"], ans: 0 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 3, q: "Mengapakah masyarakat tempatan menentang British?", options: ["A. British menggalakkan semua pembesar memerintah secara bebas", "B. Campur tangan British mengancam hak dan kedudukan mereka", "C. British menyerahkan kuasa kepada semua penduduk", "D. Masyarakat tempatan menolak semua bentuk perdagangan"], ans: 1 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 4, q: "Rentap merupakan pemimpin masyarakat yang manakah?", options: ["A. Melayu", "B. Iban", "C. Kadazandusun", "D. Orang Asli"], ans: 1 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 5, q: "Apakah nama asal Rentap?", options: ["A. Libau", "B. Mat Sator", "C. Mat Salleh", "D. Dato’ Kelana"], ans: 0 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 6, q: "Rentap juga dikenali sebagai __________.", options: ["A. Raja Hilir dan Raja Laut", "B. Raja Darat dan Raja Ulu", "C. Raja Muda dan Raja Bendahara", "D. Raja Perairan dan Raja Negeri"], ans: 1 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 7, q: "Di manakah Rentap menjadi pemimpin masyarakat Iban?", options: ["A. Sungai Pahang dan Sungai Perak", "B. Sungai Kelantan dan Sungai Terengganu", "C. Sungai Skrang dan Sungai Saribas", "D. Sungai Muar dan Sungai Linggi"], ans: 2 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 8, q: "Apakah antara sebab penentangan Rentap terhadap James Brooke?", options: ["A. James Brooke menghapuskan petempatan orang Iban", "B. James Brooke menutup semua sekolah tempatan", "C. James Brooke memindahkan ibu negeri ke Johor", "D. James Brooke melarang semua kegiatan pertanian"], ans: 0 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 9, q: "Apakah peristiwa yang berlaku pada tahun 1853 dalam perjuangan Rentap?", options: ["A. Rentap menyerang kubu Brooke di Nanga Skrang", "B. Rentap menyerah diri kepada Charles Brooke", "C. Rentap meninggalkan Sarawak untuk selama-lamanya", "D. Rentap menandatangani perjanjian dengan British"], ans: 0 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 10, q: "Siapakah pegawai James Brooke yang terkorban dalam serangan Rentap pada tahun 1853?", options: ["A. Dato’ Kelana", "B. Alan Lee", "C. Hugh Clifford", "D. Frank Swettenham"], ans: 1 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 11, q: "Ke manakah Rentap berundur selepas James Brooke menyerbu kubunya di Sungai Lang pada tahun 1854?", options: ["A. Bukit Sadok", "B. Kuala Lumpur", "C. Pasir Puteh", "D. Sungai Ujong"], ans: 0 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 12, q: "Siapakah yang menyerang kubu Rentap di Bukit Sadok pada tahun 1857?", options: ["A. James Brooke", "B. Charles Brooke", "C. Dato’ Kelana", "D. Mat Salleh"], ans: 1 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 13, q: "Apakah bentuk penentangan yang melibatkan tindakan mencabar perjanjian?", options: ["A. Menolak atau mempertikaikan perjanjian yang mengancam kepentingan tempatan", "B. Membina sekolah untuk pegawai British", "C. Menyokong semua peraturan British tanpa bantahan", "D. Menghapuskan pentadbiran tradisional secara sukarela"], ans: 0 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 14, q: "Mengapakah mempertahankan hak dan kedudukan pemerintah tempatan menjadi matlamat perjuangan?", options: ["A. Untuk membolehkan kuasa tempatan terus dipelihara", "B. Untuk menyerahkan semua tanah kepada kuasa asing", "C. Untuk menghapuskan semua adat masyarakat", "D. Untuk menghentikan semua kegiatan ekonomi"], ans: 0 },
+  { section: "Bahagian A — 7.1 Matlamat dan Bentuk Penentangan Masyarakat Tempatan", num: 15, q: "KBAT. Sebuah kuasa asing memperkenalkan peraturan baharu tanpa mengambil kira adat dan hak masyarakat tempatan. Apakah tindakan yang paling sesuai berdasarkan bentuk penentangan yang dipelajari?", options: ["A. Menerima semua peraturan tanpa menilai kesannya", "B. Mengadakan bantahan secara teratur dan menggunakan saluran yang sesuai", "C. Mengabaikan semua masalah masyarakat", "D. Menyerahkan semua hak kepada kuasa asing"], ans: 1 },
+
+  // 7.2
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 16, q: "Apakah tindakan British di Sungai Ujong pada tahun 1874?", options: ["A. Menyebelahi Dato’ Kelana untuk meluaskan pengaruh", "B. Menyerahkan pemerintahan kepada Yamtuan Antah sepenuhnya", "C. Menghapuskan semua daerah di Negeri Sembilan", "D. Memindahkan semua penduduk ke Sarawak"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 17, q: "Siapakah pemerintah yang kedudukannya dicabar akibat peluasan kuasa British di Negeri Sembilan?", options: ["A. Sultan Abdul Hamid Halim Shah", "B. Yamtuan Antah", "C. Rentap", "D. Mat Sator"], ans: 1 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 18, q: "Bagaimanakah British mengukuhkan pengaruhnya di Rembau, Jelebu dan Seri Menanti?", options: ["A. Melantik pemerintah tempatan tanpa campur tangan", "B. Menempatkan Pegawai Majistret dan Pemungut Hasil", "C. Menghapuskan semua urusan pentadbiran", "D. Menyerahkan hasil negeri kepada penduduk"], ans: 1 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 19, q: "Apakah kesan penyatuan daerah-daerah di Negeri Sembilan oleh British?", options: ["A. Pembentukan Persekutuan Negeri Sembilan", "B. Pembentukan Persekutuan Sarawak", "C. Penghapusan semua daerah", "D. Pembentukan negeri baharu di Sabah"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 20, q: "Antara berikut, yang manakah merupakan bidang kuasa tempatan yang terjejas oleh pentadbiran Barat?", options: ["A. Pemerintahan", "B. Cuaca", "C. Bentuk muka bumi", "D. Kedudukan bintang"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 21, q: "Apakah yang dimaksudkan dengan perundangan tempatan?", options: ["A. Peraturan dan undang-undang yang diamalkan dalam masyarakat tempatan", "B. Undang-undang yang hanya digunakan di negara asing", "C. Peraturan berkaitan cuaca dan iklim", "D. Sistem pengangkutan antara negeri"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 22, q: "Apakah perubahan yang boleh menjejaskan kuasa kewangan pemerintah tempatan?", options: ["A. Campur tangan dalam urusan kutipan hasil dan cukai", "B. Pertambahan jumlah hujan", "C. Perubahan arah angin", "D. Pertambahan kawasan hutan semula jadi"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 23, q: "Sebelum pentadbiran British, bagaimanakah cukai hasil tanaman di Pasir Puteh dikutip?", options: ["A. Berdasarkan jumlah keluaran", "B. Berdasarkan umur petani", "C. Berdasarkan bilangan anak petani", "D. Berdasarkan jarak rumah ke bandar"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 24, q: "Apakah keadaan cukai sebelum pentadbiran British jika hasil tanaman seseorang petani sedikit?", options: ["A. Cukai yang dikenakan lebih rendah", "B. Cukai sentiasa digandakan", "C. Petani diwajibkan membayar cukai dua kali", "D. Semua hasil tanaman dirampas"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 25, q: "Apakah peraturan berkaitan tanah yang tidak diusahakan sebelum pentadbiran British, berdasarkan bahan?", options: ["A. Dikenakan cukai paling tinggi", "B. Dikecualikan daripada cukai", "C. Dirampas serta-merta", "D. Wajib ditanam dengan getah"], ans: 1 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 26, q: "Selepas pentadbiran British, apakah yang perlu dilaporkan oleh penduduk berkaitan sawah padi?", options: ["A. Jumlah keluasan sawah padi yang dimiliki", "B. Bilangan ahli keluarga sahaja", "C. Jumlah ternakan di rumah", "D. Nama semua jiran"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 27, q: "Berdasarkan bahan, tanah seluas 400 depa persegi dikenakan cukai sebanyak __________ setahun.", options: ["A. Satu kupang", "B. Dua kupang", "C. Tiga kupang", "D. Lima kupang"], ans: 2 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 28, q: "Apakah kesan perubahan sistem cukai terhadap masyarakat tempatan?", options: ["A. Semua petani bebas daripada cukai", "B. Pemilik tanah diwajibkan membayar cukai", "C. Semua tanah menjadi milik petani", "D. Hasil pertanian tidak lagi diperlukan"], ans: 1 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 29, q: "KBAT. Seorang petani mengalami hasil tanaman yang sedikit tetapi tetap diwajibkan membayar cukai tanah. Apakah masalah yang paling mungkin dihadapinya?", options: ["A. Kesukaran menjelaskan bayaran cukai", "B. Lebihan pendapatan yang terlalu tinggi", "C. Tidak perlu bekerja di sawah", "D. Mendapat tanah percuma secara automatik"], ans: 0 },
+  { section: "Bahagian B — 7.2 Sistem Pentadbiran Barat Memberikan Kesan terhadap Kuasa Pemerintahan dan Kehidupan Masyarakat Tempatan", num: 30, q: "KBAT. Mengapakah perubahan sistem pentadbiran dan cukai boleh mencetuskan penentangan?", options: ["A. Perubahan itu mungkin membebankan rakyat dan menjejaskan kuasa tempatan", "B. Semua perubahan pasti meningkatkan pendapatan rakyat", "C. Perubahan itu menghapuskan semua tanggungjawab pemerintah", "D. Masyarakat tempatan tidak menjalankan sebarang kegiatan ekonomi"], ans: 0 },
+
+  // 7.3
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 31, q: "Apakah tujuan utama masyarakat tempatan menentang pentadbiran British?", options: ["A. Mempertahankan kepentingan dan hak masyarakat tempatan", "B. Menggalakkan penguasaan British tanpa batas", "C. Menghapuskan semua bentuk pemerintahan tempatan", "D. Menyerahkan semua hasil negeri kepada pihak luar"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 32, q: "Apakah yang ditunjukkan oleh perjuangan Rentap?", options: ["A. Keberanian mempertahankan masyarakat daripada ancaman luar", "B. Kesediaan meninggalkan semua hak masyarakat", "C. Penolakan terhadap semua bentuk kepimpinan", "D. Keinginan menghapuskan petempatan sendiri"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 33, q: "Apakah tindakan Charles Brooke terhadap Rentap pada tahun 1858?", options: ["A. Menyerang kubu Rentap di Bukit Sadok buat kali kedua", "B. Menyerahkan Sarawak kepada Rentap", "C. Membatalkan semua serangan terhadap Rentap", "D. Melantik Rentap sebagai pegawai British"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 34, q: "Apakah yang berlaku pada tahun 1861 dalam perjuangan Rentap?", options: ["A. Charles Brooke menyerang kubu Rentap di Bukit Sadok buat kali ketiga", "B. Rentap menubuhkan Persekutuan Negeri Sembilan", "C. Rentap memimpin penentangan di Pasir Puteh", "D. James Brooke menyerang kubu di Sungai Ujong"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 35, q: "Ke manakah Rentap berundur selepas serangan terakhir di Bukit Sadok?", options: ["A. Entabai", "B. Pasir Puteh", "C. Naning", "D. Sungai Ujong"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 36, q: "Antara berikut, yang manakah merupakan strategi penentangan masyarakat tempatan yang dinyatakan dalam bahan?", options: ["A. Muafakat", "B. Mengabaikan keselamatan", "C. Memusnahkan semua hasil pertanian sendiri", "D. Menyerahkan semua senjata kepada pihak lawan"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 37, q: "Apakah kepentingan muafakat dalam perjuangan masyarakat tempatan?", options: ["A. Mengukuhkan kerjasama antara pihak yang menentang", "B. Menyebabkan semua pemimpin bertindak bersendirian", "C. Menghapuskan semangat perjuangan", "D. Memudahkan pihak lawan menguasai masyarakat"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 38, q: "Apakah fungsi kubu pertahanan dalam sesuatu penentangan?", options: ["A. Melindungi pejuang daripada serangan musuh", "B. Menjadi tempat kutipan hasil tanaman sahaja", "C. Menggantikan semua sistem perundangan", "D. Menghalang masyarakat daripada bekerjasama"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 39, q: "Mengapakah persenjataan penting dalam penentangan bersenjata?", options: ["A. Membantu pejuang mempertahankan diri dan menghadapi serangan", "B. Menghapuskan keperluan kepada strategi", "C. Menjamin kemenangan tanpa sebarang risiko", "D. Menghalang semua bentuk kerjasama"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 40, q: "Bagaimanakah sistem perundangan boleh digunakan dalam penentangan?", options: ["A. Melalui tindakan undang-undang atau saluran perundangan", "B. Dengan memansuhkan semua peraturan masyarakat", "C. Dengan mengabaikan semua bukti", "D. Dengan melarang masyarakat mendapatkan keadilan"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 41, q: "Apakah maksud penentangan bersenjata?", options: ["A. Penentangan menggunakan kekuatan senjata", "B. Penentangan melalui perbincangan sahaja", "C. Penentangan dengan menulis laporan kewangan", "D. Penentangan dengan membayar semua cukai"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 42, q: "Mengapakah sesetengah masyarakat tempatan menentang tindakan British yang menghapuskan petempatan mereka?", options: ["A. Petempatan merupakan sebahagian daripada kehidupan dan kepentingan mereka", "B. Mereka mahu semua petempatan dimusnahkan", "C. Mereka tidak memerlukan tanah", "D. Mereka mahu menghentikan semua kegiatan masyarakat"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 43, q: "Apakah cabaran yang boleh dihadapi oleh pejuang tempatan ketika menentang kuasa British?", options: ["A. Kekurangan sumber dan persenjataan berbanding pihak lawan", "B. Tiada sebarang ancaman daripada pihak lawan", "C. Mendapat bantuan tanpa had daripada British", "D. Semua pihak lawan menyerah diri secara sukarela"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 44, q: "Apakah kemungkinan kesan jika pemimpin masyarakat tempatan tidak mencapai kata sepakat?", options: ["A. Perjuangan menjadi kurang tersusun", "B. Semua strategi menjadi lebih berkesan secara automatik", "C. Kuasa pihak lawan terus berkurang", "D. Semua masalah pentadbiran selesai"], ans: 0 },
+  { section: "Bahagian C — 7.3 Penentangan Masyarakat Tempatan", num: 45, q: "KBAT. Sebuah komuniti mahu mempertahankan hak mereka daripada peraturan yang membebankan. Apakah pendekatan paling berkesan berdasarkan strategi penentangan yang dipelajari?", options: ["A. Bertindak secara bersendirian tanpa perancangan", "B. Bermuafakat, merancang tindakan dan menggunakan saluran yang sesuai", "C. Mengabaikan masalah sehingga menjadi lebih serius", "D. Memutuskan hubungan antara semua anggota masyarakat"], ans: 1 },
+
+  // 7.4
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 46, q: "Apakah antara pengajaran daripada perjuangan masyarakat tempatan?", options: ["A. Cinta akan negara", "B. Mengutamakan kepentingan diri sahaja", "C. Mengabaikan keselamatan negara", "D. Menolak semua bentuk kerjasama"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 47, q: "Apakah nilai yang ditunjukkan oleh pejuang yang sanggup menghadapi risiko demi mempertahankan tanah air?", options: ["A. Keberanian", "B. Ketamakan", "C. Sikap sambil lewa", "D. Keangkuhan"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 48, q: "Apakah maksud bersedia berkorban untuk negara?", options: ["A. Sanggup memberikan usaha dan menghadapi kesukaran demi negara", "B. Mengutamakan keuntungan peribadi dalam semua keadaan", "C. Mengelakkan semua tanggungjawab", "D. Menyerahkan hak negara kepada pihak luar"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 49, q: "Mengapakah perpaduan penting dalam mempertahankan tanah air?", options: ["A. Memudahkan masyarakat bertindak bersama-sama", "B. Menggalakkan pertelingkahan sesama sendiri", "C. Melemahkan hubungan antara masyarakat", "D. Menghapuskan semangat kebangsaan"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 50, q: "Apakah sumbangan perjuangan masyarakat tempatan kepada generasi seterusnya?", options: ["A. Menjadi inspirasi kepada pejuang kemerdekaan tanah air", "B. Menyebabkan semua rakyat melupakan sejarah", "C. Menghapuskan semangat cinta akan negara", "D. Menggalakkan penolakan terhadap perpaduan"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 51, q: "Apakah nilai yang dapat dicontohi daripada perjuangan Rentap?", options: ["A. Keberanian mempertahankan masyarakat", "B. Sikap mementingkan diri", "C. Keengganan mempertahankan hak", "D. Sikap menyerah sebelum berusaha"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 52, q: "Apakah kesan yang mungkin berlaku apabila masyarakat tempatan bersatu dalam perjuangan?", options: ["A. Kerjasama dan semangat perjuangan dapat diperkukuh", "B. Semua bentuk kepimpinan akan terhapus", "C. Masyarakat tidak lagi mempunyai matlamat", "D. Semua masalah dapat diselesaikan tanpa usaha"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 53, q: "Mengapakah penting untuk mempelajari sejarah penentangan masyarakat tempatan?", options: ["A. Memahami perjuangan mempertahankan hak dan kedaulatan", "B. Melupakan semua peristiwa silam", "C. Menganggap perjuangan tidak mempunyai pengajaran", "D. Menolak identiti dan warisan tempatan"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 54, q: "Apakah sikap yang patut ditunjukkan apabila negara menghadapi ancaman?", options: ["A. Bersatu padu dan bertanggungjawab", "B. Mementingkan diri sendiri", "C. Menyebarkan perpecahan", "D. Mengabaikan keselamatan negara"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 55, q: "Apakah hubungan antara perjuangan masyarakat tempatan dengan kemerdekaan negara?", options: ["A. Perjuangan mereka menjadi antara inspirasi kepada generasi pejuang kemerdekaan", "B. Perjuangan mereka menyebabkan kemerdekaan tidak diperlukan", "C. Perjuangan mereka tidak memberikan sebarang pengajaran", "D. Perjuangan mereka bertujuan menghapuskan identiti negara"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 56, q: "Apakah pengajaran yang boleh diambil daripada kegigihan pejuang tempatan?", options: ["A. Tidak mudah berputus asa ketika mempertahankan hak", "B. Mengelakkan semua usaha apabila menghadapi cabaran", "C. Mengutamakan kepentingan pihak lawan", "D. Menolak semua bentuk kerjasama"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 57, q: "Apakah tindakan yang menunjukkan semangat cinta akan negara dalam kalangan murid?", options: ["A. Menghormati sejarah dan menjaga keharmonian negara", "B. Merosakkan harta benda awam", "C. Menghina warisan masyarakat", "D. Menyebarkan kebencian antara kaum"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 58, q: "Apakah akibat yang boleh timbul apabila masyarakat tidak bersatu dalam menghadapi ancaman?", options: ["A. Perjuangan menjadi lemah akibat perpecahan", "B. Semua masalah selesai dengan segera", "C. Kuasa masyarakat semakin kukuh tanpa usaha", "D. Ancaman luar hilang secara automatik"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 59, q: "KBAT. Murid sedang berbincang tentang cara menghargai perjuangan tokoh tempatan. Tindakan manakah paling sesuai?", options: ["A. Mengkaji sejarah tokoh dan mengamalkan nilai keberanian serta perpaduan", "B. Menghafal nama tokoh tanpa memahami perjuangan mereka", "C. Menganggap perjuangan tokoh tidak relevan", "D. Mengabaikan semua peninggalan sejarah"], ans: 0 },
+  { section: "Bahagian D — 7.4 Kesan Penentangan Masyarakat Tempatan", num: 60, q: "KBAT. Jika berlaku perselisihan dalam komuniti ketika menghadapi cabaran bersama, apakah tindakan yang paling menepati pengajaran daripada sejarah penentangan masyarakat tempatan?", options: ["A. Membiarkan perselisihan semakin besar", "B. Mengutamakan muafakat demi kepentingan bersama", "C. Memutuskan hubungan antara anggota masyarakat", "D. Menyerahkan semua keputusan kepada pihak luar tanpa perbincangan"], ans: 1 }
+];
+
+let currentScore = 0;
+const answeredQuestions = new Set();
+
+function renderQuiz() {
+  const container = document.getElementById('quizForm');
+  let currentSec = "";
+
+  questionsData.forEach((qItem, idx) => {
+    if (qItem.section !== currentSec) {
+      currentSec = qItem.section;
+      const secHeader = document.createElement('div');
+      secHeader.className = 'section-title';
+      secHeader.innerText = currentSec;
+      container.appendChild(secHeader);
+    }
+
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = `q-card-${idx}`;
+
+    const numSpan = document.createElement('span');
+    numSpan.className = 'question-number';
+    numSpan.innerText = `Soalan ${qItem.num}`;
+
+    const qText = document.createElement('div');
+    qText.className = 'question-text';
+    qText.innerText = qItem.q;
+
+    const optGrid = document.createElement('div');
+    optGrid.className = 'options-grid';
+
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback';
+    feedback.id = `fb-${idx}`;
+
+    qItem.options.forEach((optStr, optIdx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'option-btn';
+      btn.innerText = optStr;
+      btn.onclick = () => checkAnswer(idx, optIdx, qItem.ans);
+      optGrid.appendChild(btn);
+    });
+
+    card.appendChild(numSpan);
+    card.appendChild(qText);
+    card.appendChild(optGrid);
+    card.appendChild(feedback);
+    container.appendChild(card);
+  });
+}
+
+function checkAnswer(qIdx, selectedIdx, correctIdx) {
+  if (answeredQuestions.has(qIdx)) return;
+  answeredQuestions.add(qIdx);
+
+  const card = document.getElementById(`q-card-${qIdx}`);
+  const buttons = card.querySelectorAll('.option-btn');
+  const feedback = document.getElementById(`fb-${qIdx}`);
+
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === correctIdx) {
+      btn.classList.add('correct');
+    }
+    if (i === selectedIdx && i !== correctIdx) {
+      btn.classList.add('wrong');
+    }
+  });
+
+  if (selectedIdx === correctIdx) {
+    currentScore++;
+    document.getElementById('score').innerText = currentScore;
+    feedback.innerText = "Syabas! Jawapan anda BETUL.";
+    feedback.className = "feedback correct";
+  } else {
+    feedback.innerText = `Jawapan anda SALAH. Jawapan betul ialah: ${questionsData[qIdx].options[correctIdx]}`;
+    feedback.className = "feedback wrong";
+  }
+}
+
+window.onload = renderQuiz;
+</script>
+</body>
+</html>
